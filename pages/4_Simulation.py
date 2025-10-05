@@ -8,8 +8,6 @@ import base64
 st.set_page_config(page_title="CFB Simulation", layout="wide")
 st.header("🔐 CFB Mode Simulation")
 
-# ---------------------- CFB Implementation ----------------------
-
 def cfb_encrypt(plaintext_bytes, key, iv, segment_size=16):
     """
     CFB mode encryption implementation
@@ -26,23 +24,17 @@ def cfb_encrypt(plaintext_bytes, key, iv, segment_size=16):
     cipher = AES.new(key, AES.MODE_ECB)
     ciphertext = b''
     feedback_register = iv
-    
-    # Process data in segments
+
     for i in range(0, len(plaintext_bytes), segment_size):
-        # Encrypt the feedback register
         encrypted_feedback = cipher.encrypt(feedback_register)
         
-        # Get current plaintext segment
         plaintext_segment = plaintext_bytes[i:i+segment_size]
         
-        # XOR plaintext with encrypted feedback (only use needed bytes)
         ciphertext_segment = bytes(a ^ b for a, b in zip(plaintext_segment, encrypted_feedback))
         ciphertext += ciphertext_segment
         
-        # Update feedback register: shift left and add new ciphertext
         feedback_register = feedback_register[len(ciphertext_segment):] + ciphertext_segment
         
-        # If we need a full block, pad with zeros
         if len(feedback_register) < 16:
             feedback_register += b'\x00' * (16 - len(feedback_register))
     
@@ -61,26 +53,20 @@ def cfb_decrypt(ciphertext_bytes, key, iv, segment_size=16):
     Returns:
         Decrypted plaintext (bytes)
     """
-    cipher = AES.new(key, AES.MODE_ECB)  # Same as encryption!
+    cipher = AES.new(key, AES.MODE_ECB) 
     plaintext = b''
     feedback_register = iv
-    
-    # Process data in segments
+
     for i in range(0, len(ciphertext_bytes), segment_size):
-        # Encrypt the feedback register (same as encryption)
         encrypted_feedback = cipher.encrypt(feedback_register)
-        
-        # Get current ciphertext segment
+
         ciphertext_segment = ciphertext_bytes[i:i+segment_size]
-        
-        # XOR ciphertext with encrypted feedback
+
         plaintext_segment = bytes(a ^ b for a, b in zip(ciphertext_segment, encrypted_feedback))
         plaintext += plaintext_segment
-        
-        # Update feedback register: shift left and add received ciphertext
+
         feedback_register = feedback_register[len(ciphertext_segment):] + ciphertext_segment
-        
-        # If we need a full block, pad with zeros
+
         if len(feedback_register) < 16:
             feedback_register += b'\x00' * (16 - len(feedback_register))
     
@@ -94,7 +80,6 @@ def generate_iv():
     """Generate a random 128-bit IV"""
     return secrets.token_bytes(16)
 
-# ---------------------- Streamlit UI ----------------------
 
 st.write("""
 This simulation demonstrates CFB (Cipher Feedback) mode encryption and decryption using AES as the underlying block cipher.
@@ -275,22 +260,4 @@ with tab3:
             except Exception as e:
                 st.error(f"❌ File decryption failed: {str(e)}")
 
-st.markdown("---")
 
-st.subheader("📚 Understanding the Process")
-st.write("""
-**Key Points about this CFB implementation:**
-
-1. **Block Cipher:** Uses AES-256 in ECB mode as the underlying block cipher
-2. **Segment Size:** You can choose 1, 8, or 16 bytes (smaller segments = more stream-like behavior)  
-3. **Feedback Register:** Starts with IV, then shifts and incorporates ciphertext
-4. **Same Key/IV:** Decryption uses the same key and IV as encryption
-5. **No Padding:** CFB doesn't require padding like CBC mode
-
-**Security Notes:**
-- Never reuse the same IV with the same key
-- The IV doesn't need to be secret, but must be unique
-- This is a demonstration - production use requires additional security measures
-""")
-
-st.info("💡 **Try This:** Encrypt some text, then change the segment size and try to decrypt. Notice how segment size affects the encryption process!")

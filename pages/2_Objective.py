@@ -18,21 +18,4 @@ The main objectives of this CFB (Cipher Feedback) mode implementation project ar
 
 5. **Interactive Simulation**: Create a user-friendly interface for encrypting/decrypting text and understanding the process.
 
-### 🔍 Learning Outcomes:
-
-- Master the concept of **block cipher modes of operation**
-- Understand the difference between **block ciphers** and **stream ciphers**
-- Learn about **initialization vectors (IV)** and their importance
-- Comprehend **error propagation** characteristics in CFB mode
-- Gain practical experience in **cryptographic algorithm implementation**
-- Understand **security considerations** specific to CFB mode
-
-### 💡 Practical Applications:
-
-- Real-time data encryption for network communications
-- Secure transmission over error-prone channels
-- Understanding modern cryptographic protocols (SSL/TLS)
-- Foundation for advanced cryptographic studies
-
-This project bridges theoretical cryptography concepts with practical implementation.
 """)

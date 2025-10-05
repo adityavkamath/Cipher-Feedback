@@ -14,7 +14,6 @@ CFB mode converts a block cipher into a stream cipher, allowing encryption of ar
 
 st.markdown("---")
 
-# ------------------ CFB Encryption Process ------------------
 st.subheader("🔐 CFB Encryption Process")
 
 st.write("""
@@ -47,7 +46,6 @@ Where:
 
 st.markdown("---")
 
-# ------------------ CFB Decryption Process ------------------
 st.subheader("🔓 CFB Decryption Process")
 
 st.write("""
@@ -72,7 +70,6 @@ For subsequent blocks:
 
 st.markdown("---")
 
-# ------------------ Key Properties ------------------
 st.subheader("🔑 Key Properties of CFB Mode")
 
 col1, col2 = st.columns(2)
@@ -98,7 +95,6 @@ with col2:
 
 st.markdown("---")
 
-# ------------------ Implementation Functions ------------------
 st.subheader("🔹 Core CFB Functions")
 
 st.markdown("""
@@ -173,48 +169,3 @@ def cfb_decrypt(ciphertext, key, iv, block_size=16):
 ```
 """)
 
-st.info("🔍 **Key Insight**: CFB decryption uses the block cipher's **encryption** function, not decryption!")
-
-st.markdown("---")
-
-st.subheader("📊 Security Considerations")
-
-st.markdown("""
-1. **IV Uniqueness**: Each encryption must use a unique IV to prevent identical plaintext blocks from producing identical ciphertext.
-
-2. **Error Propagation**: A single bit error in ciphertext affects the current block and shifts the error to subsequent blocks until it "falls out" of the feedback register.
-
-3. **Bit-flipping Attacks**: Attackers can flip specific bits in the ciphertext to cause predictable changes in the plaintext.
-
-4. **Parallel Processing**: While encryption must be sequential, decryption can be parallelized since each block depends only on the previous ciphertext block.
-""")
-
-st.markdown("---")
-
-st.subheader("🔄 CFB Mode Diagram")
-
-st.write("""
-**Encryption Flow:**
-```
-IV → [Block Cipher] → Output₁
-                        ↓ (XOR)
-Plaintext₁ → → → → Ciphertext₁
-                        ↓ (Feedback)
-Ciphertext₁ → [Block Cipher] → Output₂  
-                        ↓ (XOR)
-Plaintext₂ → → → → Ciphertext₂
-```
-
-**Decryption Flow:**
-```
-IV → [Block Cipher] → Output₁
-                        ↓ (XOR)
-Ciphertext₁ → → → → Plaintext₁
-     ↓ (Feedback)
-[Block Cipher] → Output₂
-     ↓ (XOR)
-Ciphertext₂ → → → → Plaintext₂
-```
-""")
-
-st.success("✨ **Notice**: The same block cipher encryption operation is used for both encryption and decryption!")

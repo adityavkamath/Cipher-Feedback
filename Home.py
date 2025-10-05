@@ -20,5 +20,4 @@ Use the left sidebar to navigate through the sections:
 - **Conclusion** - Summary and practical applications
 """)
 
-st.info("🔐 CFB mode converts block ciphers into stream ciphers, enabling encryption of data streams of any length.")
 st.success("Navigate using the sidebar →")
